@@ -1,0 +1,1 @@
+//caricare il conf con una fetch
