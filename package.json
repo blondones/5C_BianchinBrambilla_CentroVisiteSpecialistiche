@@ -1,0 +1,11 @@
+{
+  "name": "5c_bianchinbrambilla_centrovisitespecialistiche",
+  "version": "1.0.0",
+  "description": "progetto di visite specialistiche",
+  "main": "script1.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Bianchin Davide & Brambilla Gianluca",
+  "license": "ISC"
+}
