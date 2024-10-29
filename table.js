@@ -106,12 +106,4 @@ const addReservation = (reservation) => {
 initializeAvailability();
 createTable(availabilityData);
 
-const exampleReservation = {
-  date: "2024-11-05",
-  roomsBooked: [
-    { room: "singola", quantity: 2 },
-    { room: "suite", quantity: 1 }
-  ]
-};
-
 addReservation(exampleReservation);
