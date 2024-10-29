@@ -42,29 +42,30 @@ const createTable = (information) => {
   updateTable();
   const div = document.getElementById("tableDiv");
   let tableHTML = 
-    "<table border='1'>" +
+  "<table border='1'>" +
       "<thead>" +
-        "<tr>" +
-          "<th>Data</th>" +
-          "<th>Singola</th>" +
-          "<th>Doppia</th>" +
-          "<th>Suite</th>" +
-        "</tr>" +
+          "<tr>" +
+              "<th></th>" +
+              "<th>Lunedì</th>" +
+              "<th>Martedì</th>" +
+              "<th>Mercoledì</th>" +
+              "<th>Giovedì</th>" +
+              "<th>Venerdì</th>" +
+          "</tr>" +
       "</thead>" +
       "<tbody>";
 
   const dates = fDates();
-  for (let i = 0; i < dates.length; i++) {
-    //console.log(information[dates[i]]);
-    console.log(i);
+  for (let i = 8; i <= 12; i++) {
     tableHTML += 
-      "<tr>" +
-        "<td>" + dates[i] + "</td>" +
-        "<td>" + information[dates[i]].singola + "</td>" +
-        "<td>" + information[dates[i]].doppia + "</td>" +
-        "<td>" + information[dates[i]].suite + "</td>" +
-      "</tr>";
-  }
+        "<tr>" +
+            "<td>" + i + "</td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+        "</tr>";
+}
 
   tableHTML +=
       "</tbody>" +
