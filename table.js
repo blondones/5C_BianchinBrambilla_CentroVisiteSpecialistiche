@@ -40,7 +40,7 @@ const fDates = () => {
 
 const createTable = (information) => {
   updateTable();
-  const div = document.getElementById("TableID");
+  const div = document.getElementById("tableDiv");
   let tableHTML = 
     "<table border='1'>" +
       "<thead>" +
