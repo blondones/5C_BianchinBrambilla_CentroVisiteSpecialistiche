@@ -1,90 +1,55 @@
-const getDateKey = (date) => date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
-
-let date = new Date();
-const datekeys = [];
-for (let i = 0; i < 30; i++) {
-    date.setDate(date.getDate() + 1);
-
-    const key = getDateKey(date);
-    datekeys.push(key);
-}
-
-const conf = {
-    "singola": 10,
-    "doppia": 5,
-    "suite": 3
-}
-
 const createForm = (parentElement) => {
-    let roomTypes = Object.keys(conf);
+    let labels;
     let callback = null;
-
-    return {
-        setRoomTypes: (types) => {
-            roomTypes = types;
-        },
-        onsubmit: (callbackInput) => {
-            callback = callbackInput;
-        },
-        render: () => {
-            let formHtml = `
-        <div>
-          Data prenotazione:<br>
-          <input id="bookingDate" type="date" />
-        </div>`;
-            
-            formHtml += roomTypes.map((room) => {
-                return `
-          <div>` + room + `  Numero di camere:<br>
-              <input id="` + room + `rooms" type="number" />
-            </div>`;
-            }).join('\n');
-
-            formHtml += `<button type='button' id='submit'>Invio</button>
-        <div id="ris"></div>`;
-
-            parentElement.innerHTML = formHtml;
-
-            document.querySelector("#submit").onclick = () => {
-                const bookingDate = document.querySelector("#bookingDate").value;
-                const roomsBooked = roomTypes.map((room) => {
-                    return {
-                        room,
-                        quantity: parseInt(document.querySelector("#" + room + "rooms").value),
-                        maxQuantity: conf[room]
-                    };
-                });
-
-                let OneRoomAvailable = false;
-                for (let i = 0; i < roomsBooked.length; i++) {
-                    if (roomsBooked[i].quantity > 0) {
-                        OneRoomAvailable = true;
-                        break;
-                    }
-                }
-                let availableDate = bookingDate !== '';
-                const result = document.querySelector("#ris");
-                if (availableDate && OneRoomAvailable) {
-                    result.innerText = "OK";
-                    callback({
-                        date: bookingDate,
-                        roomsBooked: roomsBooked.filter(c => c.quantity > 0)
-                    });
-                    document.querySelector("#bookingDate").value = '';
-                    roomTypes.forEach(room => {
-                        document.querySelector("#" + room + "rooms").value = '';
-                    });
-                } else {
-                    result.innerText = "KO";
-                }
-            };
-        },
+  
+    return {  
+      setLabels: (newLabels) => { labels = newLabels; },  
+      onsubmit: (callbackInput) => { callback = callbackInput },
+      render: () => { 
+        parentElement.innerHTML = `
+          <form id="reservationForm">
+            <div class="mb-3">
+              <label for="date" class="form-label">Data</label>
+              <input type="date" id="date" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label for="time" class="form-label">Ora di Prenotazione</label>
+              <select id="time" class="form-select" required>
+                <option value="">Seleziona un orario</option>
+                <option value="08:00">08:00</option>
+                <option value="09:00">09:00</option>
+                <option value="10:00">10:00</option>
+                <option value="11:00">11:00</option>
+                <option value="12:00">12:00</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="name" class="form-label">Nominativo</label>
+              <input type="text" id="name" class="form-control" required>
+            </div>
+            <button type="button" class="btn btn-primary" id="submit">Invia</button>
+            <button type="button" class="btn btn-secondary" id="cancel">Annulla</button>
+          </form>
+        `;
+  
+        document.querySelector("#submit").onclick = () => {
+          const formData = {
+            date: document.querySelector("#date").value,
+            time: document.querySelector("#time").value,
+            name: document.querySelector("#name").value
+          };
+          callback(formData);
+        };
+  
+        document.querySelector("#cancel").onclick = () => {
+          document.querySelector("#reservationForm").reset();
+        };
+      },
     };
-};
-
-const form = createForm(document.querySelector('#FormDIV'));
-form.setRoomTypes(Object.keys(conf));
-form.onsubmit((ac) => {
-    addReservation(ac);
-});
-form.render();
+  };
+  
+  const form = createForm(document.querySelector('#modaleDiv'));
+  form.setLabels(["Data", "Ora di Prenotazione", "Nominativo"]);
+  form.onsubmit(console.log);
+  form.render();
+  

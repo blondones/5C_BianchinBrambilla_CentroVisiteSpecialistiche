@@ -1,55 +1,44 @@
-/* Cache Remota */
+const generateFetchComponent = () => {
+    let token;
 
-const sendReservation = (reservation) => {
-    console.log(reservation);
-    fetch('https://ws.cipiaceinfo.it/cache/set', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'key': '3d60697b-92ca-435d-85b4-33e5d6abe5a4'
+    return {
+        build: (inputToken) => {
+            token = inputToken;
         },
-        body: JSON.stringify({
-            key: 'prenotazione',
-            value: reservation
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Prenotazione inviata:', data);
-        updateTable();
-    })
-    .catch(error => {
-        console.log('Errore nell\'invio della prenotazione:', error);
-    });
-}
-
-const updateTable = () => {
-    fetch('https://ws.cipiaceinfo.it/cache/get', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'key': '3d60697b-92ca-435d-85b4-33e5d6abe5a4'
+        setData: (key, data) => {
+            return new Promise((resolve, reject) => {
+                fetch("https://ws.progettimolinari.it/cache/set", {
+                    method: "POST",
+                    headers: {
+                        "content-type": "application/json",
+                        "key": token
+                    },
+                    body: JSON.stringify({
+                        key: key,
+                        value: JSON.stringify(data)
+                    })
+                })
+                .then(r => r.json())
+                .then(data => resolve(data.result))
+                .catch(err => reject(err.result));
+            });
         },
-        body: JSON.stringify({
-            key: 'prenotazione'
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data.result);
-        //createTable(data.result);
-    })
-    .catch(error => {
-        console.log('Errore nel caricamento della tabella:', error);
-    });
-}
-
-form.onsubmit = (data) => {
-    const reservation = {
-        date: data.availableDate,
-        roomsBooked: data.roomsBooked
+        getData: (key) => {
+            return new Promise((resolve, reject) => {
+                fetch("https://ws.progettimolinari.it/cache/get", {
+                    method: "POST",
+                    headers: {
+                        "content-type": "application/json",
+                        "key": token
+                    },
+                    body: JSON.stringify({
+                        key: key
+                    })
+                })
+                .then(r => r.json())
+                .then(data => resolve(data.result))
+                .catch(err => reject(err.result));
+            })
+        }
     };
-    sendReservation(reservation);
-};
-
-updateTable();
+}
