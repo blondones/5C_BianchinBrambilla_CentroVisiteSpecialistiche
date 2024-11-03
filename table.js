@@ -12,22 +12,13 @@ const createTable = (parentElement, token) => {
   const renderButtons = () => {
     let buttonsHTML = '';
     tipologieVisite.forEach(function(tipologia) {
-        buttonsHTML += '<button class="tipologia-button">' + tipologia + '</button>';
+        buttonsHTML += '<button class="tipologia-button" onclick="selectTipologia(\'' + tipologia + '\')">' + tipologia + '</button>';
     });
-
-    buttonsHTML += '<button class="btn btn-primary" id="prenotaButton">PRENOTA</button>';
     document.querySelector('#buttonsDiv').innerHTML = buttonsHTML;
-
-
-    document.querySelector('#prenotaButton').addEventListener('click', openReservationModal);
-};
-
-
+  };
   
-
   window.selectTipologia = (tipologia) => {
     selectedTipologia = tipologia; 
-    renderButtons();
     loadAppointments(tipologia);
   
     const buttons = document.querySelectorAll('.tipologia-button');
@@ -41,9 +32,6 @@ const createTable = (parentElement, token) => {
       }
     });
   };
-  
-  
-  
 
   const fetchAvailabilityData = () => {
     fetchComponent.getData("availabilityData")
@@ -54,6 +42,7 @@ const createTable = (parentElement, token) => {
           console.error("Errore durante il parsing dei dati JSON:", error);
           availabilityData = {};
         }
+        
         renderTable();
       })
       .catch(function(error) {
