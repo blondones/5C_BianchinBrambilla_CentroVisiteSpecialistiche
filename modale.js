@@ -13,7 +13,7 @@ const createForm = (parentElement) => {
               <input type="date" id="date" class="form-control" required>
             </div>
             <div class="mb-3">
-              <label for="time" class="form-label">Ora di Prenotazione</label>
+              <label for="time" class="form-label">Ora</label>
               <select id="time" class="form-select" required>
                 <option value="">Seleziona un orario</option>
                 <option value="08:00">08:00</option>
@@ -27,7 +27,7 @@ const createForm = (parentElement) => {
               <label for="name" class="form-label">Nominativo</label>
               <input type="text" id="name" class="form-control" required>
             </div>
-            <button type="button" class="btn btn-primary" id="submit">Invia</button>
+            <button type="button" class="btn btn-primary" id="submit">Prenota</button>
             <button type="button" class="btn btn-secondary" id="cancel">Annulla</button>
           </form>
         `;
