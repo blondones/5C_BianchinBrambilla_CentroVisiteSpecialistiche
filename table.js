@@ -1,78 +1,87 @@
-const createTable = (parentElement) => {
+const createTable = (parentElement, token) => {
   let availabilityData = {};
-  const roomConfig = {
-    singola: 10,
-    doppia: 5,
-    suite: 3
+  const fetchComponent = generateFetchComponent();
+  fetchComponent.build(token);
+
+  const tipologieVisite = ["Cardiologia", "Psicologia", "Oncologia", "Ortopedia", "Neurologia"];
+  const daysOfWeek = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"];
+  const timeSlots = [8, 9, 10, 11, 12];
+  let currentWeekStartDate = new Date();
+
+  const renderButtons = () => {
+    let buttonsHTML = '';
+    tipologieVisite.forEach(function(tipologia) {
+      buttonsHTML += '<button style="margin: 5px; padding: 10px; border: 1px solid #007bff; background-color: #f8f9fa; cursor: pointer;" onclick="loadAppointments(\'' + tipologia + '\')">' + tipologia + '</button>';
+    });
+    document.querySelector('#buttonsDiv').innerHTML = buttonsHTML;
   };
 
-  const fDates = () => {
-    const dates = [];
-    const today = new Date();
-    
-    for (let i = 0; i < 30; i++) {
-      const newDate = new Date();
-      newDate.setDate(today.getDate() + i);
-      
-      const day = ('0' + newDate.getDate()).slice(-2);
-      const month = ('0' + (newDate.getMonth() + 1)).slice(-2);
-      const year = newDate.getFullYear();
-      
-      const formattedDate = year + "-" + month + "-" + day;
-      dates.push(formattedDate);
-    }
-    
-    return dates;
+  const fetchAvailabilityData = () => {
+    fetchComponent.getData("availabilityData")
+      .then(function(data) {
+        try {
+          availabilityData = data && typeof data === "string" ? JSON.parse(data) : {};
+        } catch (error) {
+          console.error("Errore durante il parsing dei dati JSON:", error);
+          availabilityData = {};
+        }
+        
+        renderTable();
+      })
+      .catch(function(error) {
+        console.error("Errore nel caricamento dei dati:", error);
+        availabilityData = {};
+        renderTable();
+      });
   };
 
-  const initializeAvailability = () => {
-    const dates = fDates();
-    for (let i = 0; i < dates.length; i++) {
-      availabilityData[dates[i]] = {
-        singola: roomConfig.singola,
-        doppia: roomConfig.doppia,
-        suite: roomConfig.suite
-      };
-    }
+  const updateTable = () => {
+    fetchAvailabilityData();
   };
-
+  
   const renderTable = () => {
-    let tableHTML = 
-      "<table border='1'>" +
-        "<thead>" +
-          "<tr>" +
-            "<th></th>" +
-            "<th>Lunedì</th>" +
-            "<th>Martedì</th>" +
-            "<th>Mercoledì</th>" +
-            "<th>Giovedì</th>" +
-            "<th>Venerdì</th>" +
-          "</tr>" +
-        "</thead>" +
-        "<tbody>";
+    let tableHTML = "<table class='table table-bordered'><thead><tr><th>Orario</th>";
+    daysOfWeek.forEach(function(day) {
+      tableHTML += '<th>' + day + '</th>';
+    });
+    tableHTML += "</tr></thead><tbody>";
 
-    for (let i = 8; i <= 12; i++) {
-      tableHTML += 
-        "<tr>" +
-          "<td>" + i + "</td>" +
-          "<td></td>" +
-          "<td></td>" +
-          "<td></td>" +
-          "<td></td>" +
-          "<td></td>" +
-        "</tr>";
-    }
+    timeSlots.forEach(function(slot) {
+      tableHTML += '<tr><td>' + slot + ':00</td>';
+      daysOfWeek.forEach(function(_, dayIndex) {
+        let dateKey = formatDate(addDays(currentWeekStartDate, dayIndex));
+        let slotKey = dateKey + '-' + slot;
+        tableHTML += '<td>' + (availabilityData[slotKey] || '') + '</td>';
+      });
+      tableHTML += "</tr>";
+    });
 
-    tableHTML +=
-      "</tbody>" +
-      "</table>";
-
+    tableHTML += "</tbody></table>";
     parentElement.innerHTML = tableHTML;
   };
 
-  initializeAvailability();
-  renderTable();
+  const addDays = (date, days) => {
+    let result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+  };
+
+  const formatDate = (date) => {
+    let year = date.getFullYear();
+    let month = ('0' + (date.getMonth() + 1)).slice(-2);
+    let day = ('0' + date.getDate()).slice(-2);
+    return year + '-' + month + '-' + day;
+  };
+
+  window.loadAppointments = (tipologia) => {
+    console.log('Caricamento delle prenotazioni per ' + tipologia);
+    fetchAvailabilityData();
+  };
+
+  renderButtons();
+  updateTable();
+  setInterval(updateTable, 300000);
 };
 
-// Utilizzo della funzione createTable
-createTable(document.querySelector('#tableDiv'));
+createTable(document.querySelector('#tableDiv'), "3d60697b-92ca-435d-85b4-33e5d6abe5a4");
+console.log("File table.js caricato correttamente.");

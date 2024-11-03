@@ -7,7 +7,7 @@ const generateFetchComponent = () => {
         },
         setData: (key, data) => {
             return new Promise((resolve, reject) => {
-                fetch("https://ws.progettimolinari.it/cache/set", {
+                fetch("https://ws.cipiaceinfo.it/cache/set", {
                     method: "POST",
                     headers: {
                         "content-type": "application/json",
@@ -25,7 +25,7 @@ const generateFetchComponent = () => {
         },
         getData: (key) => {
             return new Promise((resolve, reject) => {
-                fetch("https://ws.progettimolinari.it/cache/get", {
+                fetch("https://ws.cipiaceinfo.it/cache/get", {
                     method: "POST",
                     headers: {
                         "content-type": "application/json",
