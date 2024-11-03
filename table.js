@@ -14,11 +14,11 @@ const createTable = (parentElement, token) => {
     tipologieVisite.forEach(function(tipologia) {
         buttonsHTML += '<button class="tipologia-button">' + tipologia + '</button>';
     });
-    // Aggiungi il pulsante PRENOTA
+
     buttonsHTML += '<button class="btn btn-primary" id="prenotaButton">PRENOTA</button>';
     document.querySelector('#buttonsDiv').innerHTML = buttonsHTML;
 
-    // Assegna il gestore dell'evento al pulsante PRENOTA
+
     document.querySelector('#prenotaButton').addEventListener('click', openReservationModal);
 };
 
