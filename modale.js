@@ -44,7 +44,7 @@ const createForm = (parentElement) => {
                 </form>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                <button type="button" class="btn btn-secondary" id="cancel" data-bs-dismiss="modal">Annulla</button>
                 <button type="button" class="btn btn-primary" id="submit">Prenota</button>
               </div>
             </div>
@@ -63,18 +63,20 @@ const createForm = (parentElement) => {
           const result = fetchComponent.setData("reservation_" + formData.date + "_" + formData.time, formData);
           if (result) {
             console.log("Prenotazione salvata con successo!", result);
-            //alert("Prenotazione salvata con successo!");
             document.querySelector("#reservationForm").reset();
-            const modal = new bootstrap.Modal(document.querySelector("#reservationModal"));
-            modal.hide();
+            const modal = bootstrap.Modal.getInstance(document.querySelector("#reservationModal"));
+            if (modal) {
+              modal.hide();
+            }
           } else {
-            //alert("Errore durante il salvataggio della prenotazione.");
+            console.error("Errore durante il salvataggio della prenotazione.");
           }
         } catch (error) {
           console.error("Errore:", error);
-          //alert("Errore durante la comunicazione con la cache remota.");
         }
-        callback(formData);
+        if (callback) {
+          callback(formData);
+        }
       };
 
       document.querySelector("#cancel").onclick = () => {
