@@ -1,5 +1,6 @@
 import { generateFetchComponent } from "./cache.js";
 export let selectedTipologia = null;
+
 const createTable = (parentElement, token) => {
     let availabilityData = {};
     const fetchComponent = generateFetchComponent();
@@ -8,7 +9,6 @@ const createTable = (parentElement, token) => {
     const daysOfWeek = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"];
     const timeSlots = [8, 9, 10, 11, 12];
     let currentWeekStartDate = new Date();
-    
 
     const getNextMonday = (date) => {
         let result = new Date(date);
@@ -27,7 +27,6 @@ const createTable = (parentElement, token) => {
     const renderButtons = () => {
         let buttonsHTML = '';
         tipologieVisite.forEach(function(tipologia) {
-            selectedTipologia = tipologia;
             buttonsHTML += '<button class="tipologia-button">' + tipologia + '</button>';
         });
         document.querySelector('#buttonsDiv').innerHTML = buttonsHTML;
@@ -49,9 +48,10 @@ const createTable = (parentElement, token) => {
         });
     };
 
-    const fetchAvailabilityData = () => {
-        fetchComponent.getData()
+    const fetchAvailabilityData = (tipologia) => {
+        return fetchComponent.getData(tipologia)
             .then(function(data) {
+                console.log("Dati ricevuti dal server:", data);
                 try {
                     availabilityData = JSON.parse(data);
                     console.log("Dati di disponibilità:", availabilityData);
@@ -60,7 +60,7 @@ const createTable = (parentElement, token) => {
                     availabilityData = {};
                 }
 
-                renderTable();
+                renderTable(); 
             })
             .catch(function(error) {
                 console.error("Errore nel caricamento dei dati:", error);
@@ -70,11 +70,13 @@ const createTable = (parentElement, token) => {
     };
 
     const updateTable = () => {
-        fetchAvailabilityData();
+        if (selectedTipologia) { 
+            fetchAvailabilityData(selectedTipologia);
+        }
     };
 
     const renderTable = () => {
-        console.log(availabilityData);
+        console.log("Rendering della tabella con i dati:", availabilityData);
         let tableHTML = "<div><button id='prevWeek'>&lt; Precedente</button>";
         tableHTML += "<button id='nextWeek'>Successivo &gt;</button></div>";
         tableHTML += "<table class='table table-bordered'><thead><tr><th>Orario</th>";
@@ -89,8 +91,10 @@ const createTable = (parentElement, token) => {
             tableHTML += '<tr><td>' + slot + ':00</td>';
             daysOfWeek.forEach(function(_, dayIndex) {
                 let dateKey = formatDate(addBusinessDays(currentWeekStartDate, dayIndex));
-                let slotKey = dateKey + '-' + slot;
-                tableHTML += '<td>' + (availabilityData[slotKey] || '') + '</td>';
+                let slotKey = dateKey + '_' + slot + ':00';
+                console.log(availabilityData["Cardiologia2024-11-04_12:00"]);
+                console.log(selectedTipologia + slotKey)
+                tableHTML += '<td>' + (availabilityData[selectedTipologia + slotKey] || '-') + '</td>';
             });
             tableHTML += "</tr>";
         });
@@ -126,7 +130,7 @@ const createTable = (parentElement, token) => {
 
     window.loadAppointments = (tipologia) => {
         console.log('Caricamento delle prenotazioni per ' + tipologia);
-        fetchAvailabilityData();
+        fetchAvailabilityData(tipologia); 
     };
 
     window.changeWeek = (increment) => {
@@ -140,6 +144,5 @@ const createTable = (parentElement, token) => {
     updateTable();
     setInterval(updateTable, 300000);
 };
-
 
 createTable(document.querySelector('#tableDiv'), "3d60697b-92ca-435d-85b4-33e5d6abe5a4");
