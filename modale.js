@@ -10,6 +10,9 @@ const createForm = (parentElement) => {
     
     render: () => {
       parentElement.innerHTML = `
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reservationModal">
+          Aggiungi Prenotazione
+        </button>
         <div class="modal fade" id="reservationModal" tabindex="-1" aria-labelledby="reservationModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -60,16 +63,16 @@ const createForm = (parentElement) => {
           const result = fetchComponent.setData("reservation_" + formData.date + "_" + formData.time, formData);
           if (result) {
             console.log("Prenotazione salvata con successo!", result);
-            alert("Prenotazione salvata con successo!");
+            //alert("Prenotazione salvata con successo!");
             document.querySelector("#reservationForm").reset();
             const modal = new bootstrap.Modal(document.querySelector("#reservationModal"));
             modal.hide();
           } else {
-            alert("Errore durante il salvataggio della prenotazione.");
+            //alert("Errore durante il salvataggio della prenotazione.");
           }
         } catch (error) {
           console.error("Errore:", error);
-          alert("Errore durante la comunicazione con la cache remota.");
+          //alert("Errore durante la comunicazione con la cache remota.");
         }
         callback(formData);
       };
