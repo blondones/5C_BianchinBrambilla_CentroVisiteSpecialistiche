@@ -24,16 +24,7 @@ const createTable = (parentElement, token) => {
 
 
   
-window.openReservationModal = () => {
-  console.log('Apertura del modulo di prenotazione');
-  const form = createForm(document.querySelector("#modaleDiv"));
-  form.setLabels(["Data", "Ora di Prenotazione", "Nominativo"]);
-  form.onsubmit(console.log);
-  form.render();
-};
 
-
-  
   window.selectTipologia = (tipologia) => {
     selectedTipologia = tipologia; 
     renderButtons();
