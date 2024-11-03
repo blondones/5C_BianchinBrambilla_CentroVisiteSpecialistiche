@@ -7,14 +7,52 @@ const createTable = (parentElement, token) => {
   const daysOfWeek = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"];
   const timeSlots = [8, 9, 10, 11, 12];
   let currentWeekStartDate = new Date();
+  let selectedTipologia = null; 
 
   const renderButtons = () => {
     let buttonsHTML = '';
     tipologieVisite.forEach(function(tipologia) {
-      buttonsHTML += '<button style="margin: 5px; padding: 10px; border: 1px solid #007bff; background-color: #f8f9fa; cursor: pointer;" onclick="loadAppointments(\'' + tipologia + '\')">' + tipologia + '</button>';
+        buttonsHTML += '<button class="tipologia-button">' + tipologia + '</button>';
     });
+
+    buttonsHTML += '<button class="btn btn-primary" id="prenotaButton">PRENOTA</button>';
     document.querySelector('#buttonsDiv').innerHTML = buttonsHTML;
+
+
+    document.querySelector('#prenotaButton').addEventListener('click', openReservationModal);
+};
+
+
+  
+window.openReservationModal = () => {
+  console.log('Apertura del modulo di prenotazione');
+  const form = createForm(document.querySelector("#modaleDiv"));
+  form.setLabels(["Data", "Ora di Prenotazione", "Nominativo"]);
+  form.onsubmit(console.log);
+  form.render();
+};
+
+
+  
+  window.selectTipologia = (tipologia) => {
+    selectedTipologia = tipologia; 
+    renderButtons();
+    loadAppointments(tipologia);
+  
+    const buttons = document.querySelectorAll('.tipologia-button');
+    buttons.forEach(button => {
+      button.style.backgroundColor = '';
+      button.style.color = '';
+  
+      if (button.textContent === tipologia) {
+        button.style.backgroundColor = 'blue'; 
+        button.style.color = 'white'; 
+      }
+    });
   };
+  
+  
+  
 
   const fetchAvailabilityData = () => {
     fetchComponent.getData("availabilityData")
