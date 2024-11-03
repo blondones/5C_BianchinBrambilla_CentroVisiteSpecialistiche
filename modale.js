@@ -1,5 +1,6 @@
 import { generateFetchComponent } from "./cache.js";
 import { selectedTipologia } from "./table.js";
+import { createTable } from "./table.js";
 
 const createForm = (parentElement) => {
   let labels;
@@ -63,9 +64,7 @@ const createForm = (parentElement) => {
 
         try {
           fetchComponent.getData().then(response => {
-            console.log("Risposta raw:", response); 
             const json = JSON.parse(response);
-
             console.log(typeof(json)); 
 
             const key = selectedTipologia + formData.date + "_" + formData.time;
@@ -73,7 +72,6 @@ const createForm = (parentElement) => {
               json[key] = formData.name; 
               fetchComponent.setData(json).then(result => {
                 if (result) {
-                  console.log("Prenotazione salvata con successo!", result);
                   document.querySelector("#reservationForm").reset();
                   const modal = bootstrap.Modal.getInstance(document.querySelector("#reservationModal"));
                   if (modal) {
@@ -82,17 +80,15 @@ const createForm = (parentElement) => {
                 } else {
                   console.error("Errore durante il salvataggio della prenotazione.");
                 }
+                callback();
               });
+              console.log("dati settati");
             } else {
               console.log("La prenotazione esiste già.");
             }
           });
         } catch (error) {
           console.error("Errore:", error);
-        }
-
-        if (callback) {
-          callback(formData);
         }
       };
 
@@ -105,5 +101,8 @@ const createForm = (parentElement) => {
 
 const form = createForm(document.querySelector("#modaleDiv"));
 form.setLabels(["Data", "Ora di Prenotazione", "Nominativo"]);
-form.onsubmit(console.log);
+const table = createTable(document.getElementById("tableDiv"));
+form.onsubmit(() => {
+  table();
+});
 form.render();
