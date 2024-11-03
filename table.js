@@ -12,11 +12,26 @@ const createTable = (parentElement, token) => {
   const renderButtons = () => {
     let buttonsHTML = '';
     tipologieVisite.forEach(function(tipologia) {
-      buttonsHTML += '<button class="tipologia-button" onclick="selectTipologia(\'' + tipologia + '\')">' + tipologia + '</button>';
+        buttonsHTML += '<button class="tipologia-button">' + tipologia + '</button>';
     });
+    // Aggiungi il pulsante PRENOTA
+    buttonsHTML += '<button class="btn btn-primary" id="prenotaButton">PRENOTA</button>';
     document.querySelector('#buttonsDiv').innerHTML = buttonsHTML;
-  };
+
+    // Assegna il gestore dell'evento al pulsante PRENOTA
+    document.querySelector('#prenotaButton').addEventListener('click', openReservationModal);
+};
+
+
   
+window.openReservationModal = () => {
+  console.log('Apertura del modulo di prenotazione');
+  const form = createForm(document.querySelector("#modaleDiv"));
+  form.setLabels(["Data", "Ora di Prenotazione", "Nominativo"]);
+  form.onsubmit(console.log);
+  form.render();
+};
+
 
   
   window.selectTipologia = (tipologia) => {
