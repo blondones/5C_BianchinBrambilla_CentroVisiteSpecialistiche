@@ -29,6 +29,26 @@ const createTable = (parentElement, token) => {
             buttonsHTML += '<button class="tipologia-button">' + tipologia + '</button>';
         });
         document.querySelector('#buttonsDiv').innerHTML = buttonsHTML;
+    
+        
+        const buttons = document.querySelectorAll('.tipologia-button');
+        buttons.forEach((button) => {
+            button.onclick = function() {
+              
+                buttons.forEach((btn) => {
+                    btn.style.backgroundColor = '#f8f9fa'; 
+                    btn.style.color = '#000'; 
+                });
+    
+               
+                button.style.backgroundColor = '#007bff'; 
+                button.style.color = '#fff';
+                
+              
+                selectedTipologia = button.textContent; 
+                loadAppointments(selectedTipologia);
+            };
+        });
     };
 
     const fetchAvailabilityData = () => {
@@ -78,7 +98,6 @@ const createTable = (parentElement, token) => {
         tableHTML += "</tbody></table>";
         parentElement.innerHTML = tableHTML;
 
-        // Setup buttons for changing week
         const prevWeekButton = document.getElementById('prevWeek');
         const nextWeekButton = document.getElementById('nextWeek');
         prevWeekButton.onclick = () => changeWeek(-1);
