@@ -25,7 +25,6 @@ const createTable = (parentElement, token) => {
           console.error("Errore durante il parsing dei dati JSON:", error);
           availabilityData = {};
         }
-        
         renderTable();
       })
       .catch(function(error) {

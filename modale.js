@@ -2,7 +2,7 @@ const createForm = (parentElement) => {
   let labels;
   let callback = null;
   const fetchComponent = generateFetchComponent();
-  fetchComponent.build("");
+  fetchComponent.build("3d60697b-92ca-435d-85b4-33e5d6abe5a4");
 
   return {  
     setLabels: (newLabels) => { labels = newLabels; },  
@@ -34,7 +34,7 @@ const createForm = (parentElement) => {
           <button type="button" class="btn btn-secondary" id="cancel">Annulla</button>
         </form>
       `;
-
+      
       document.querySelector("#submit").onclick = () => {
         const formData = {
           date: document.querySelector("#date").value,
