@@ -1,13 +1,14 @@
+import { generateFetchComponent } from "./cache.js";
+export let selectedTipologia = null;
 const createTable = (parentElement, token) => {
     let availabilityData = {};
     const fetchComponent = generateFetchComponent();
-    fetchComponent.build(token);
 
     const tipologieVisite = ["Cardiologia", "Psicologia", "Oncologia", "Ortopedia", "Neurologia"];
     const daysOfWeek = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"];
     const timeSlots = [8, 9, 10, 11, 12];
     let currentWeekStartDate = new Date();
-    let selectedTipologia = null; 
+    
 
     const getNextMonday = (date) => {
         let result = new Date(date);
@@ -26,36 +27,34 @@ const createTable = (parentElement, token) => {
     const renderButtons = () => {
         let buttonsHTML = '';
         tipologieVisite.forEach(function(tipologia) {
+            selectedTipologia = tipologia;
             buttonsHTML += '<button class="tipologia-button">' + tipologia + '</button>';
         });
         document.querySelector('#buttonsDiv').innerHTML = buttonsHTML;
-    
-        
+
         const buttons = document.querySelectorAll('.tipologia-button');
         buttons.forEach((button) => {
             button.onclick = function() {
-              
                 buttons.forEach((btn) => {
-                    btn.style.backgroundColor = '#f8f9fa'; 
-                    btn.style.color = '#000'; 
+                    btn.style.backgroundColor = '#f8f9fa';
+                    btn.style.color = '#000';
                 });
-    
-               
-                button.style.backgroundColor = '#007bff'; 
+
+                button.style.backgroundColor = '#007bff';
                 button.style.color = '#fff';
-                
-              
-                selectedTipologia = button.textContent; 
+
+                selectedTipologia = button.textContent;
                 loadAppointments(selectedTipologia);
             };
         });
     };
 
     const fetchAvailabilityData = () => {
-        fetchComponent.getData("availabilityData")
+        fetchComponent.getData()
             .then(function(data) {
                 try {
-                    availabilityData = data && typeof data === "string" ? JSON.parse(data) : {};
+                    availabilityData = JSON.parse(data);
+                    console.log("Dati di disponibilità:", availabilityData);
                 } catch (error) {
                     console.error("Errore durante il parsing dei dati JSON:", error);
                     availabilityData = {};
@@ -75,6 +74,7 @@ const createTable = (parentElement, token) => {
     };
 
     const renderTable = () => {
+        console.log(availabilityData);
         let tableHTML = "<div><button id='prevWeek'>&lt; Precedente</button>";
         tableHTML += "<button id='nextWeek'>Successivo &gt;</button></div>";
         tableHTML += "<table class='table table-bordered'><thead><tr><th>Orario</th>";
@@ -140,5 +140,6 @@ const createTable = (parentElement, token) => {
     updateTable();
     setInterval(updateTable, 300000);
 };
+
 
 createTable(document.querySelector('#tableDiv'), "3d60697b-92ca-435d-85b4-33e5d6abe5a4");

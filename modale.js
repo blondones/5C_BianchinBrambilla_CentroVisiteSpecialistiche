@@ -1,13 +1,15 @@
+import { generateFetchComponent } from "./cache.js";
+import { selectedTipologia } from "./table.js";
+
 const createForm = (parentElement) => {
   let labels;
   let callback = null;
   const fetchComponent = generateFetchComponent();
-  fetchComponent.build("3d60697b-92ca-435d-85b4-33e5d6abe5a4");
 
   return {
     setLabels: (newLabels) => { labels = newLabels; },
-    onsubmit: (callbackInput) => { callback = callbackInput },
-    
+    onsubmit: (callbackInput) => { callback = callbackInput; },
+
     render: () => {
       parentElement.innerHTML = `
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reservationModal">
@@ -56,24 +58,39 @@ const createForm = (parentElement) => {
         const formData = {
           date: document.querySelector("#date").value,
           time: document.querySelector("#time").value,
-          name: document.querySelector("#name").value
+          name: document.querySelector("#name").value,
         };
 
         try {
-          const result = fetchComponent.setData("reservation_" + formData.date + "_" + formData.time, formData);
-          if (result) {
-            console.log("Prenotazione salvata con successo!", result);
-            document.querySelector("#reservationForm").reset();
-            const modal = bootstrap.Modal.getInstance(document.querySelector("#reservationModal"));
-            if (modal) {
-              modal.hide();
+          fetchComponent.getData().then(response => {
+            console.log("Risposta raw:", response); 
+            const json = JSON.parse(response);
+
+            console.log(typeof(json)); 
+
+            const key = selectedTipologia + formData.date + "_" + formData.time;
+            if (!json[key]) {
+              json[key] = formData.name; 
+              fetchComponent.setData(json).then(result => {
+                if (result) {
+                  console.log("Prenotazione salvata con successo!", result);
+                  document.querySelector("#reservationForm").reset();
+                  const modal = bootstrap.Modal.getInstance(document.querySelector("#reservationModal"));
+                  if (modal) {
+                    modal.hide();
+                  }
+                } else {
+                  console.error("Errore durante il salvataggio della prenotazione.");
+                }
+              });
+            } else {
+              console.log("La prenotazione esiste già.");
             }
-          } else {
-            console.error("Errore durante il salvataggio della prenotazione.");
-          }
+          });
         } catch (error) {
           console.error("Errore:", error);
         }
+
         if (callback) {
           callback(formData);
         }
