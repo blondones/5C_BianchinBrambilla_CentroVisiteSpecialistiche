@@ -24,12 +24,27 @@ const createTable = (parentElement, token) => {
   currentWeekStartDate = getNextMonday(currentWeekStartDate);
 
   const renderButtons = () => {
-      let buttonsHTML = '';
-      tipologieVisite.forEach(function(tipologia) {
-          buttonsHTML += '<button class="tipologia-button">' + tipologia + '</button>';
-      });
-      document.querySelector('#buttonsDiv').innerHTML = buttonsHTML;
-  };
+    let buttonsHTML = '';
+    tipologieVisite.forEach(function(tipologia) {
+        buttonsHTML += '<button class="tipologia-button">' + tipologia + '</button>';
+    });
+    document.querySelector('#buttonsDiv').innerHTML = buttonsHTML;
+
+    const buttons = document.querySelectorAll('.tipologia-button');
+    buttons.forEach(button => {
+        button.addEventListener('click', () => handleTipologiaClick(button));
+    });
+};
+
+window.handleTipologiaClick = (buttonElement) => {
+    const buttons = document.querySelectorAll('.tipologia-button');
+    buttons.forEach(btn => btn.classList.remove('selected'));
+
+    buttonElement.classList.add('selected');
+
+    loadAppointments(buttonElement.textContent);
+};
+
 
   const fetchAvailabilityData = () => {
       fetchComponent.getData("availabilityData")

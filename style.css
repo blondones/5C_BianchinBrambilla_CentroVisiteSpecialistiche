@@ -15,10 +15,11 @@ th, td {
     background-color: #f8f9fa;
     color: #000;
     cursor: pointer;
-  }
-  
-  .tipologia-button.selected {
+}
+
+.tipologia-button.selected {
     background-color: #007bff;
     color: #fff;
-  }
+}
+
   
