@@ -23,23 +23,24 @@ export const createTable = (parentElement) => {
     };
 
     currentWeekStartDate = getNextMonday(currentWeekStartDate);
-    
+
     const renderButtons = () => {
         let buttonsHTML = '';
-        tipologieVisite.forEach(function(tipologia) {
-            buttonsHTML += '<button class="tipologia-button">' + tipologia + '</button>';
+        tipologieVisite.forEach(function (tipologia) {
+            buttonsHTML += tipologia === "Cardiologia" ? '<button class="tipologia-button selected">' + tipologia + '</button>': '<button class="tipologia-button notSelected">' + tipologia + '</button>';
         });
         document.querySelector('#buttonsDiv').innerHTML = buttonsHTML;
         const buttons = document.querySelectorAll('.tipologia-button');
         buttons.forEach((button) => {
-            button.onclick = function() {
+            button.onclick = function () {
                 buttons.forEach((btn) => {
-                    btn.style.backgroundColor = '#f8f9fa';
-                    btn.style.color = '#000';
+                    btn.classList.remove("selected");
+                    btn.classList.add("notSelcted");
+                   
                 });
-
-                button.style.backgroundColor = '#007bff';
-                button.style.color = '#fff';
+                button.classList.remove("notSelected");
+                button.classList.add("selected");
+                console.log(button.classList);
                 selectedTipologia = button.textContent;
                 loadAppointments(selectedTipologia);
             };
@@ -48,20 +49,20 @@ export const createTable = (parentElement) => {
 
     const fetchAvailabilityData = (tipologia) => {
         fetchComponent.getData(tipologia)
-            .then(function(data) {
+            .then(function (data) {
                 availabilityData = JSON.parse(data);
-                renderTable(); 
+                renderTable();
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.error("Errore nel caricamento dei dati:", error);
                 availabilityData = {};
                 renderTable();
             });
-            console.log("dati presi")
+        console.log("dati presi")
     };
 
     const updateTable = () => {
-        if (selectedTipologia) { 
+        if (selectedTipologia) {
             fetchAvailabilityData(selectedTipologia);
         }
     };
@@ -77,9 +78,10 @@ export const createTable = (parentElement) => {
         }
         tableHTML += "</tr></thead><tbody>";
 
-        timeSlots.forEach(function(slot) {
+        timeSlots.forEach(function (slot) {
+            slot = slot <= 9 ? "0" + slot : slot;
             tableHTML += '<tr><td>' + slot + ':00</td>';
-            daysOfWeek.forEach(function(_, dayIndex) {
+            daysOfWeek.forEach(function (_, dayIndex) {
                 let dateKey = formatDate(addBusinessDays(currentWeekStartDate, dayIndex));
                 let slotKey = dateKey + '_' + slot + ':00';
                 tableHTML += '<td>' + (availabilityData[selectedTipologia + slotKey] || '-') + '</td>';
@@ -118,7 +120,7 @@ export const createTable = (parentElement) => {
 
     window.loadAppointments = (tipologia) => {
         console.log('Caricamento delle prenotazioni per ' + tipologia);
-        fetchAvailabilityData(tipologia); 
+        fetchAvailabilityData(tipologia);
     };
 
     window.changeWeek = (increment) => {
@@ -129,7 +131,7 @@ export const createTable = (parentElement) => {
     };
 
     renderButtons();
-    selectedTipologia = tipologieVisite[0]; 
+    selectedTipologia = tipologieVisite[0];
     loadAppointments(selectedTipologia);
     setInterval(updateTable, 300000);
     return updateTable;

@@ -35,7 +35,8 @@ h1 {
     margin-top: 20px;
 }
 
-.table th, .table td {
+.table th,
+.table td {
     padding: 10px;
     text-align: center;
     border: 1px solid #ddd;
@@ -50,7 +51,7 @@ h1 {
     background: #f1f1f1;
 }
 
-button { 
+button {
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
@@ -59,12 +60,20 @@ button {
     margin: 5px;
 }
 
-
-button.tipologia-button {
-    background: #007bff;
-    color: white;
+.hide {
+    display: none;
 }
 
-button.tipologia-button:hover {
-    background: #0056b3;
+.show {
+    display: block;
+}
+
+.notSelcted {
+    background: #f8f9fa !important;
+    color: black !important;
+}
+
+.selected {
+    background: #007bff!important;
+    color: white !important;
 }

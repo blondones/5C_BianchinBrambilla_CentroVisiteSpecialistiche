@@ -76,33 +76,30 @@ export const createForm = (parentElement) => {
               json[key] = formData.name;
               fetchComponent.setData(json).then(result => {
                 if (result) {
-                  document.querySelector("#reservationForm").reset();
-                  const modal = bootstrap.Modal.getInstance(document.querySelector("#reservationModal"));
-                  if (modal) {
-                    modal.hide();
-                  }
+                 document.querySelector("#reservationForm").reset();
+                 document.getElementById("cancel").click();
                 } else {
                   console.error("Errore durante il salvataggio della prenotazione.");
                   messaggio.innerText = "Errore durante il salvataggio della prenotazione.";
-                  messaggio.style.display = "block";
+                  messaggio.classList.add("show");
                 }
                 callback();
               });
             } else {
               messaggio.innerText = "La prenotazione esiste già. Non può essere effettuata.";
-              messaggio.style.display = "block";
+              messaggio.classList.add("show");
             }
           });
         } catch (error) {
           console.error("Errore:", error);
           messaggio.innerText = "Si è verificato un errore durante l'elaborazione della prenotazione.";
-          messaggio.style.display = "block";
+          messaggio.classList.add("show");
         }
       };
 
       document.querySelector("#cancel").onclick = () => {
         document.querySelector("#reservationForm").reset();
-        document.querySelector("#message").style.display = "none";
+        document.querySelector("#message").classList.add("hide");;
       };
     },
   };
