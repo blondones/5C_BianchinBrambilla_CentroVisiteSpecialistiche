@@ -20,6 +20,10 @@ h1 {
     margin: 20px 0;
 }
 
+.ap {
+    margin: 20px;
+}
+
 #tableDiv {
     margin: 20px;
 }
@@ -46,7 +50,7 @@ h1 {
     background: #f1f1f1;
 }
 
-button {
+button { 
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
