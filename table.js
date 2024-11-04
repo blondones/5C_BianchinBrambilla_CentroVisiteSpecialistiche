@@ -23,14 +23,12 @@ export const createTable = (parentElement) => {
     };
 
     currentWeekStartDate = getNextMonday(currentWeekStartDate);
-
     const renderButtons = () => {
         let buttonsHTML = '';
         tipologieVisite.forEach(function(tipologia) {
             buttonsHTML += '<button class="tipologia-button">' + tipologia + '</button>';
         });
         document.querySelector('#buttonsDiv').innerHTML = buttonsHTML;
-
         const buttons = document.querySelectorAll('.tipologia-button');
         buttons.forEach((button) => {
             button.onclick = function() {
@@ -41,7 +39,6 @@ export const createTable = (parentElement) => {
 
                 button.style.backgroundColor = '#007bff';
                 button.style.color = '#fff';
-
                 selectedTipologia = button.textContent;
                 loadAppointments(selectedTipologia);
             };

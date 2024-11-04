@@ -66,7 +66,6 @@ const createForm = (parentElement) => {
           fetchComponent.getData().then(response => {
             const json = JSON.parse(response);
             console.log(typeof(json)); 
-
             const key = selectedTipologia + formData.date + "_" + formData.time;
             if (!json[key]) {
               json[key] = formData.name; 
@@ -84,6 +83,7 @@ const createForm = (parentElement) => {
               });
               console.log("dati settati");
             } else {
+
               console.log("La prenotazione esiste già.");
             }
           });
