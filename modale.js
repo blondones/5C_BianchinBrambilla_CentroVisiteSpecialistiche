@@ -81,6 +81,7 @@ const createForm = (parentElement) => {
                   if (modal) {
                     modal.hide();
                   }
+
                 } else {
                   console.error("Errore durante il salvataggio della prenotazione.");
                   messaggio.innerText = "Errore durante il salvataggio della prenotazione.";
