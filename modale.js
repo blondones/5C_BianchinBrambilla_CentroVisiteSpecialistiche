@@ -13,9 +13,11 @@ const createForm = (parentElement) => {
 
     render: () => {
       parentElement.innerHTML = `
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reservationModal">
+      <div class = "ap">
+        <button type="button" class="button" data-bs-toggle="modal" data-bs-target="#reservationModal">
           Aggiungi Prenotazione
         </button>
+        </div>
         <div class="modal fade" id="reservationModal" tabindex="-1" aria-labelledby="reservationModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -47,8 +49,8 @@ const createForm = (parentElement) => {
                 </form>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="cancel" data-bs-dismiss="modal">Annulla</button>
-                <button type="button" class="btn btn-primary" id="submit">Prenota</button>
+                <button type="button" class="button" id="cancel" data-bs-dismiss="modal">Annulla</button>
+                <button type="button" class="button" id="submit">Prenota</button>
               </div>
             </div>
           </div>
