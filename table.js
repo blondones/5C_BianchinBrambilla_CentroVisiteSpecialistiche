@@ -23,6 +23,7 @@ export const createTable = (parentElement) => {
     };
 
     currentWeekStartDate = getNextMonday(currentWeekStartDate);
+    
     const renderButtons = () => {
         let buttonsHTML = '';
         tipologieVisite.forEach(function(tipologia) {
@@ -128,7 +129,8 @@ export const createTable = (parentElement) => {
     };
 
     renderButtons();
-    updateTable();
+    selectedTipologia = tipologieVisite[0]; 
+    loadAppointments(selectedTipologia);
     setInterval(updateTable, 300000);
     return updateTable;
 };
