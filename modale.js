@@ -50,8 +50,8 @@ const createForm = (parentElement) => {
               <div id="message" class="mt-3" style="display: none;"></div> <!-- Div per i messaggi -->
             </div>
             <div class="modal-footer">
-              <button type="button" class="button" id="cancel" data-bs-dismiss="modal">Annulla</button>
-              <button type="button" class="button" id="submit">Prenota</button>
+              <button type="button" class="btn btn-danger" id="cancel" data-bs-dismiss="modal">Annulla</button>
+              <button type="button" class="btn btn-success" id="submit">Prenota</button>
             </div>
           </div>
         </div>
@@ -103,7 +103,7 @@ const createForm = (parentElement) => {
 
       document.querySelector("#cancel").onclick = () => {
         document.querySelector("#reservationForm").reset();
-        document.querySelector("#message").style.display = "none"; 
+        document.querySelector("#message").style.display = "none";
       };
     },
   };
