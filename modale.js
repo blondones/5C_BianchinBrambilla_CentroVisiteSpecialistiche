@@ -2,7 +2,7 @@ import { generateFetchComponent } from "./cache.js";
 import { selectedTipologia } from "./table.js";
 import { createTable } from "./table.js";
 
-const createForm = (parentElement) => {
+export const createForm = (parentElement) => {
   let labels;
   let callback = null;
   const fetchComponent = generateFetchComponent();
